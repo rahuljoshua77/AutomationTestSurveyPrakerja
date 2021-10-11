@@ -25,6 +25,7 @@ dc = DesiredCapabilities.CHROME
 dc['loggingPrefs'] = {'driver': 'OFF', 'server': 'OFF', 'browser': 'OFF'}
 opts.add_argument('--ignore-ssl-errors=yes')
 opts.add_argument("--start-maximized")
+
 opts.add_argument('--ignore-certificate-errors')
 opts.add_argument('--disable-blink-features=AutomationControlled')
 opts.add_experimental_option('excludeSwitches', ['enable-logging'])
@@ -36,6 +37,7 @@ def xpath_el(el):
     element_all = wait(browser,5).until(EC.presence_of_element_located((By.XPATH, el)))
     browser.execute_script("arguments[0].scrollIntoView();", element_all)
     return browser.execute_script("arguments[0].click();", element_all)
+
 
 def page_six():
     xpath_el("/html/body/div[1]/div/div/section/div/div/div[2]/form/div[2]/div/div[1]/div[2]/div/div[2]/fieldset/div[1]/label/input")
@@ -148,12 +150,15 @@ def radio_button():
         pass
 
     notif = wait(browser,5).until(EC.presence_of_element_located((By.XPATH, '/html/body/div[1]/div/div/section/div/div/div[2]'))).text
-    if notif in "Lihat Pelatihan" or notif in "Seksi WB: Kesejahteraan":
+    if "Lihat Pelatihan" in notif or "Seksi WB: Kesejahteraan" in notif:
         print(f"[*]  [ {email} ] Survey Failed")
         with open('failed.txt','a') as f:
             f.write('{0}|{1}\n'.format(email,password))
     else:
-        print(f"[*]  [ {email} ] Success Survey, {notif}")
+        if "\n" in notif:
+            notif = notif.split("\n")
+            notif = notif[1]
+        print(f"[*]  [ {email} ] Success Survey, {notif.strip()}")
         with open('success_survei.txt','a') as f:
             f.write('{0}|{1}\n'.format(email,password))
     browser.quit()
