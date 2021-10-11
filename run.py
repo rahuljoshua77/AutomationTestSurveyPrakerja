@@ -9,7 +9,7 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.action_chains import ActionChains
 import os
 import random
- 
+import time
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.support.ui import Select
 from multiprocessing import Pool
@@ -120,45 +120,45 @@ def page_one():
 def radio_button():
     try:
         page_one()
-        print(f"[*]  [ {email} ] Page One Done")
+        print(f"[{time.strftime('%d-%m-%y %X')}] [ {email} ] Page One Done")
     except Exception as e:
         pass
     try:
         page_two()
-        print(f"[*]  [ {email} ] Page Two Done")
+        print(f"[{time.strftime('%d-%m-%y %X')}] [ {email} ] Page Two Done")
     except Exception as e:
         pass
     try:
         page_three()
-        print(f"[*]  [ {email} ] Page Three Done")
+        print(f"[{time.strftime('%d-%m-%y %X')}] [ {email} ] Page Three Done")
     except Exception as e:
         pass
     try:
         page_four()
-        print(f"[*]  [ {email} ] Page Four Done")
+        print(f"[{time.strftime('%d-%m-%y %X')}] [ {email} ] Page Four Done")
     except Exception as e:
         pass
     try:
         page_five()
-        print(f"[*]  [ {email} ] Page Five Done")
+        print(f"[{time.strftime('%d-%m-%y %X')}] [ {email} ] Page Five Done")
     except Exception as e:
         pass
     try:
         page_six()
-        print(f"[*]  [ {email} ] Page Six Done")
+        print(f"[{time.strftime('%d-%m-%y %X')}] [ {email} ] Page Six Done")
     except Exception as e:
         pass
 
     notif = wait(browser,5).until(EC.presence_of_element_located((By.XPATH, '/html/body/div[1]/div/div/section/div/div/div[2]'))).text
     if "Lihat Pelatihan" in notif or "Seksi WB: Kesejahteraan" in notif:
-        print(f"[*]  [ {email} ] Survey Failed")
+        print(f"[{time.strftime('%d-%m-%y %X')}] [ {email} ] Survey Failed")
         with open('failed.txt','a') as f:
             f.write('{0}|{1}\n'.format(email,password))
     else:
         if "\n" in notif:
             notif = notif.split("\n")
             notif = notif[1]
-        print(f"[*]  [ {email} ] Success Survey, {notif.strip()}")
+        print(f"[{time.strftime('%d-%m-%y %X')}] [ {email} ] Success Survey, {notif.strip()}")
         with open('success_survei.txt','a') as f:
             f.write('{0}|{1}\n'.format(email,password))
     browser.quit()
@@ -167,11 +167,11 @@ def private_accept():
     
     xpath_el('/html/body/div[2]/div[4]/div/div/div/div/form/div[2]/div[1]/label')
     xpath_el("//button[contains(text(),'Lanjutkan')]")
-    print(f"[*]  [ {email} ] Checked Ya")
+    print(f"[{time.strftime('%d-%m-%y %X')}] [ {email} ] Checked Ya")
     radio_button()
 
 def login():
-    print(f"[*]  [ {email} ] Login Account")
+    print(f"[{time.strftime('%d-%m-%y %X')}] [ {email} ] Login Account")
     browser.refresh()
     element = wait(browser,20).until(EC.element_to_be_clickable((By.XPATH, '//input[@type="email"]')))
     element.send_keys(email)
@@ -209,14 +209,14 @@ def open_browser(k):
     try:
         login()
     except Exception as e:
-        print(f"[*]  [ {email} ] Failed Login, Error: {e}")
+        print(f"[{time.strftime('%d-%m-%y %X')}] [ {email} ] Failed Login, Error: {e}")
         with open('failed.txt','a') as f:
             f.write('{0}|{1}\n'.format(email,password))
         browser.quit()
 if __name__ == '__main__':
     global list_accountsplit
-    print("[*] Automation Survey")
-    jumlah = int(input("[*] Multi Processing: "))
+    print(f"[{time.strftime('%d-%m-%y %X')}] Automation Survey")
+    jumlah = int(input(f"[{time.strftime('%d-%m-%y %X')}] Multi Processing: "))
     file_list_akun = "prakerja.txt"
     myfile_akun = open(f"{cwd}/{file_list_akun}","r")
     akun = myfile_akun.read()
